@@ -1,31 +1,32 @@
 
+import clientes
+import vehiculos
 
 
 def menu():
     print("-----------------------")
     print("-BIENVENIDO A DRIVESAFE-")
     print("-Sistema De Citas Para Conducccion")
-    print("1.registrar cliente")
-    print("2.ver clientes registrados")
-    print("3.programar citas")
-    print("4.controlar asistencia")
-    print("5.consultar historial de clientes")
-    print("6.registrar instructor")
-    print("7.consultar instructores")
-    print("8.registrar vehiculo")
-    print("9.consultar vehiculos")
-    print("10.salir")
+    print("1. registrar cliente")
+    print("2. ver clientes registrados")
+    print("3. programar citas")
+    print("4. controlar asistencia")
+    print("5. consultar historial de clientes")
+    print("6. registrar instructor")
+    print("7. consultar instructores")
+    print("8. registrar vehiculo")
+    print("9. consultar vehiculos")
+    print("10. salir")
 
 
 while True:
     menu()
-    opcion = input("Ingrese una opcion: ")
+    opcion = input("Ingrese una opcion: ").strip()
+
     if opcion == "1":
-        from clientes import registrar_cliente
-        registrar_cliente()
+        clientes.registrar_cliente()
     elif opcion == "2":
-        from clientes import ver_clientes
-        ver_clientes()
+        clientes.ver_clientes()
     elif opcion == "3":
         from citas import programar_cita
         programar_cita()
@@ -45,10 +46,10 @@ while True:
         from vehiculos import registrar_vehiculo
         registrar_vehiculo()
     elif opcion == "9":
-        from vehiculos import consultar_vehiculos
-        consultar_vehiculos()
+        vehiculos.consultar_vehiculos()
     elif opcion == "10":
         print("Saliendo del programa...")
         break
     else:
         print("Opcion invalida. Intente nuevamente.")
+        input("Presione Enter para continuar...")
