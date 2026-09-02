@@ -4,9 +4,7 @@ vehiculos = []
 def placa_ya_registrada(placa):
     placa = placa.strip().upper()
     for vehiculo in vehiculos:
-        print(vehiculo)
         if vehiculo["placa"].upper() == placa:
-            print(vehiculo["placa"].upper()== placa)
             return True
     return False
 
@@ -18,21 +16,19 @@ def registrar_vehiculo():
             print("La placa no puede estar vacia.")
             continue
 
-        else:
-            print("Placa ingresada: " + placa)
-            if placa_ya_registrada(placa):
-                print("Esta placa ya esta registrada. Ingrese otra placa.")
-            else:
-                break
+        if placa_ya_registrada(placa):
+            print("Esta placa ya esta registrada. Ingrese otra placa.")
+            continue
+
+        while True:
             tipo = input("Ingrese el tipo de vehiculo (moto/carro): ").strip().lower()
             if tipo in {"moto", "carro"}:
-                        break
+                placa = placa.upper()
+                vehiculos.append({"placa": placa, "tipo": tipo})
+                print("Vehiculo registrado: " + placa)
+                return
+
             print("Tipo de vehiculo no valido. Use moto o carro.")
-            
-            placa = placa.upper()
-            vehiculos.append({"placa": placa, "tipo": tipo})
-            print("Vehiculo registrado: " + placa)
-            continue
         
 
 def consultar_vehiculos():
