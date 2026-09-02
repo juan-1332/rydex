@@ -3,39 +3,43 @@ vehiculos = []
 
 def placa_ya_registrada(placa):
     placa = placa.strip().upper()
+
     for vehiculo in vehiculos:
-        if vehiculo["placa"].upper() == placa:
+        if vehiculo["placa"] == placa:
             return True
+
     return False
 
 
 def registrar_vehiculo():
+    print("----- Registrar Vehiculo -----")
+
     while True:
-        placa = input("Ingrese la placa del vehiculo: ").strip()
-        if not placa:
+        placa = input("Ingrese la placa del vehiculo: ").strip().upper()
+
+        if placa == "":
             print("La placa no puede estar vacia.")
             continue
 
         if placa_ya_registrada(placa):
-            print("Esta placa ya esta registrada. Ingrese otra placa.")
+            print("Este vehiculo ya se encuentra registrado.")
             continue
 
-        while True:
-            tipo = input("Ingrese el tipo de vehiculo (moto/carro): ").strip().lower()
-            if tipo in {"moto", "carro"}:
-                placa = placa.upper()
-                vehiculos.append({"placa": placa, "tipo": tipo})
-                print("Vehiculo registrado: " + placa)
-                return
+        break
 
-            print("Tipo de vehiculo no valido. Use moto o carro.")
-        
+    while True:
+        tipo = input(
+            "Ingrese el tipo de vehiculo (moto/carro): "
+        ).strip().lower()
 
-def consultar_vehiculos():
-    if not vehiculos:
-        print("No hay vehiculos registrados.")
-        return
+        if tipo == "moto" or tipo == "carro":
+            break
 
-    print("Vehiculos registrados:")
-    for i, vehiculo in enumerate(vehiculos, start=1):
-        print(str(i) + ". " + vehiculo['tipo'] + " - " + vehiculo['placa'])
+        print("Tipo de vehiculo no valido. Use moto o carro.")
+
+    vehiculos.append({
+        "placa": placa,
+        "tipo": tipo
+    })
+
+    print("Vehiculo registrado correctamente.")
