@@ -18,10 +18,16 @@ def registrar_instructor():
         if instructor_ya_registrado(nombre):
             print("Ese instructor ya existe en el sistema. Ingrese otro nombre.")
             continue
-        break
+        while True:
+            tipo_vehiculo = input("Ingrese el tipo de vehiculo que el instructor puede enseñar (moto, carro o ambos): ").strip().lower()
+            if tipo_vehiculo not in {"moto", "carro", "ambos"}:
+                print("Tipo de vehiculo no valido. Use: moto, carro o ambos.")
+                continue
+            break
 
-    instructores.append({"nombre": nombre})
-    print("Instructor registrado: " + nombre)
+        instructores.append({"nombre": nombre, "tipo_vehiculo": tipo_vehiculo})
+        print("Instructor registrado: " + nombre)
+        break
 
 
 def consultar_instructores():
@@ -30,4 +36,4 @@ def consultar_instructores():
         return
     print("Instructores registrados:")
     for i, instructor in enumerate(instructores, start=1):
-        print(str(i) + ". " + instructor['nombre'])
+        print(str(i) + ". " + instructor['nombre'] + " - Vehículo: " + instructor['tipo_vehiculo'])

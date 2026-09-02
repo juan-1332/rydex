@@ -16,6 +16,9 @@ def registrar_cliente():
             print("El nombre no puede estar vacio.")
             continue
 
+        break
+
+    while True:
         documento = input("Ingrese el documento del cliente: ").strip()
         if not documento:
             print("El documento no puede estar vacio.")

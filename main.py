@@ -46,7 +46,8 @@ while True:
         from vehiculos import registrar_vehiculo
         registrar_vehiculo()
     elif opcion == "9":
-        vehiculos.consultar_vehiculos()
+        from vehiculos import consultar_vehiculos
+        consultar_vehiculos()
     elif opcion == "10":
         print("Saliendo del programa...")
         break
