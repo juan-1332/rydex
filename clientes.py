@@ -11,7 +11,7 @@ def documento_ya_registrado(documento):
 
 def registrar_cliente():
     while True:
-        nombre = input("Ingrese el nombre del cliente: ").strip()
+        nombre = input("Ingrese el nombre del cliente: recuerda que al ingresar un cliente ingresalo con nombre y apellido, para evitar confusiones): ").strip()
         if not nombre:
             print("El nombre no puede estar vacio.")
             continue
@@ -22,6 +22,9 @@ def registrar_cliente():
         documento = input("Ingrese el documento del cliente: ").strip()
         if not documento:
             print("El documento no puede estar vacio.")
+            continue
+        if not documento.isdigit():
+            print("El documento debe ser un numero. Ingrese un documento valido.")
             continue
 
         if documento_ya_registrado(documento):

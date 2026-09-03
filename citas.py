@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta
 
 
@@ -5,11 +6,16 @@ citas = []
 
 
 def fecha_y_hora_validas(fecha, hora):
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", fecha):
+        return None
+
+    if not re.fullmatch(r"\d{2}:\d{2}", hora):
+        return None
+
     try:
         return datetime.strptime(fecha + " " + hora, "%Y-%m-%d %H:%M")
     except ValueError:
         return None
-
 
 def cita_se_cruza(fecha_hora, cita):
     fecha_hora_cita = fecha_y_hora_validas(cita["fecha"], cita["hora"])
