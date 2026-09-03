@@ -1,3 +1,11 @@
+
+
+
+
+
+import json
+
+
 vehiculos = []
 
 
@@ -27,16 +35,27 @@ def registrar_vehiculo():
         if tipo in {"moto", "carro"}:
             placa = placa.upper()
             vehiculos.append({"placa": placa, "tipo": tipo})
+            with open("vehiculos.json", "w") as archivo:
+                     json.dump(vehiculos, archivo, indent=4)    
             print("Vehiculo registrado con placas: " + placa)
             return
         print("Tipo de vehiculo no valido. Use moto o carro.")
-        
+         
+    
 
 def consultar_vehiculos():
-    if not vehiculos:
-        print("No hay vehiculos registrados.")
-        return
+    try:
+        with open("vehiculos.json", "r") as archivo:
+            datos = json.load(archivo)
+            
+            if not datos:
+                print("El archivo está vacío, no hay vehículos registrados.")
+            else:
+                print("Vehículos registrados:", datos)
+    except FileNotFoundError:
+        print("El archivo no existe, no hay vehículos registrados.")
 
-    print("Vehiculos registrados:")
-    for i, vehiculo in enumerate(vehiculos, start=1):
-        print(str(i) + ". " + vehiculo['tipo'] + " - " + vehiculo['placa'])
+
+with open("vehiculos.json", "w") as archivo:
+    json.dump(vehiculos, archivo, indent=4)
+

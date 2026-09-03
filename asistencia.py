@@ -1,18 +1,20 @@
+import json
+
 from citas import citas
 from clientes import clientes
 
 
-def buscar_cliente(nombre_cliente):
+def buscar_cliente(documento_cliente):
     for cliente in clientes:
-        if cliente["nombre"].lower() == nombre_cliente.lower():
+        if cliente["documento"] == documento_cliente:
             return cliente
     return None
 
 
-def obtener_citas_cliente(nombre_cliente):
+def obtener_citas_cliente(documento_cliente):
     citas_cliente = []
     for cita in citas:
-        if cita["cliente"].lower() == nombre_cliente.lower():
+        if cita["cliente"] == documento_cliente:
             citas_cliente.append(cita)
     return citas_cliente
 
@@ -54,10 +56,14 @@ def registrar_asistencia(cita):
         if respuesta == "si":
             cita["asistio"] = True
             print("Asistencia registrada correctamente.")
+            with open("citas.json", "w") as archivo:
+                json.dump(citas, archivo, indent=4)
             return
         if respuesta == "no":
             cita["asistio"] = False
             print("Inasistencia registrada correctamente.")
+            with open("citas.json", "w") as archivo:
+                json.dump(citas, archivo, indent=4)
             return
         print("Respuesta invalida. Use 'si' para si o 'no' para no.")
 
@@ -83,17 +89,17 @@ def controlar_asistencia():
         print("No hay clientes registrados.")
         return
 
-    nombre_cliente = input("Ingrese el nombre del cliente: ").strip()
-    if not nombre_cliente:
-        print("El nombre del cliente no puede estar vacio.")
+    documento_cliente = input("Ingrese el documento del cliente: ").strip()
+    if not documento_cliente:
+        print("El documento del cliente no puede estar vacio.")
         return
 
-    cliente = buscar_cliente(nombre_cliente)
+    cliente = buscar_cliente(documento_cliente)
     if cliente is None:
         print("Cliente no encontrado.")
         return
 
-    citas_cliente = obtener_citas_cliente(cliente["nombre"])
+    citas_cliente = obtener_citas_cliente(cliente["documento"])
     if not citas_cliente:
         print("El cliente no tiene citas.")
         return

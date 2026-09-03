@@ -1,3 +1,6 @@
+import json
+
+
 clientes = []
 
 
@@ -45,6 +48,8 @@ def registrar_cliente():
         "tipo_vehiculo": tipo_vehiculo,
     }
     clientes.append(cliente)
+    with open("clientes.json", "w") as archivo:
+        json.dump(clientes, archivo, indent=4)
     print("Cliente registrado correctamente: " + nombre)
     return cliente
 
@@ -57,3 +62,7 @@ def ver_clientes():
     print("\nClientes registrados:")
     for indice, cliente in enumerate(clientes, start=1):
         print(str(indice) + ". " + cliente['nombre'] + " - Documento: " + cliente['documento'] + " - Vehiculo: " + cliente['tipo_vehiculo'])
+
+
+with open("clientes.json", "w") as archivo:
+    json.dump(clientes, archivo, indent=4)

@@ -1,0 +1,12 @@
+[
+    {
+        "cliente": "juan",
+        "placa": "444",
+        "instructor": "felipe",
+        "fecha": "2026-08-09",
+        "hora": "07:54",
+        "duracion_horas": 1,
+        "observaciones": "juan muy duro",
+        "asistio": false
+    }
+]

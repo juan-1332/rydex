@@ -1,3 +1,4 @@
+import json
 import re
 from datetime import datetime, timedelta
 
@@ -47,23 +48,23 @@ def programar_cita():
     from vehiculos import vehiculos
 
     print("----- Programar Cita -----")
-    nombre_cliente = input("Ingrese el nombre del cliente: ").strip()
-    cliente_encontrado = None
+    documento_cliente = input("Ingrese el documento del cliente: ").strip()
+    documento_encontrado = None
 
     for cliente in clientes:
-        if cliente["nombre"].lower() == nombre_cliente.lower():
-            cliente_encontrado = cliente
+        if cliente["documento"] == documento_cliente:
+            documento_encontrado = cliente
             break
 
-    if not cliente_encontrado:
-        print("Cliente no encontrado. Por favor, registre al cliente primero.")
+    if documento_encontrado is None:
+        print("El documento ingresado no corresponde a ningun cliente registrado.")
         return
 
-    print("Cliente encontrado: " + cliente_encontrado["nombre"])
+    print("Cliente encontrado: " + documento_encontrado["nombre"])
 
     vehiculos_cliente = []
     for vehiculo in vehiculos:
-        tipo_cliente = cliente_encontrado["tipo_vehiculo"]
+        tipo_cliente = documento_encontrado["tipo_vehiculo"]
         puede_usar_vehiculo = tipo_cliente == "ambos" or vehiculo["tipo"] == tipo_cliente
         if puede_usar_vehiculo:
             vehiculos_cliente.append(vehiculo)
@@ -134,7 +135,7 @@ def programar_cita():
         print("Opcion de instructor invalida.")
 
     nueva_cita = {
-        "cliente": cliente_encontrado["nombre"],
+        "cliente": documento_encontrado["nombre"],
         "placa": vehiculo_seleccionado["placa"].upper(),
         "instructor": instructor_seleccionado["nombre"],
         "fecha": fecha_cita,
@@ -142,10 +143,13 @@ def programar_cita():
         "duracion_horas": 1,
     }
     citas.append(nueva_cita)
-
+    with open("citas.json", "w") as archivo:
+        json.dump(citas, archivo, indent=4)
     print("Cita programada para " + nueva_cita["cliente"] + ".")
     print("Vehiculo: " + nueva_cita["placa"])
     print("Instructor: " + nueva_cita["instructor"])
     print("Fecha y hora: " + nueva_cita["fecha"] + " " + nueva_cita["hora"])
     return nueva_cita
 
+with open("citas.json", "w") as archivo:
+    json.dump(citas, archivo, indent=4)

@@ -1,3 +1,6 @@
+import json
+
+
 instructores = []
 
 
@@ -26,6 +29,8 @@ def registrar_instructor():
             break
 
         instructores.append({"nombre": nombre, "tipo_vehiculo": tipo_vehiculo})
+        with open("instructores.json", "w") as archivo:
+            json.dump(instructores, archivo, indent=4)  
         print("Instructor registrado: " + nombre)
         break
 
@@ -37,3 +42,7 @@ def consultar_instructores():
     print("Instructores registrados:")
     for i, instructor in enumerate(instructores, start=1):
         print(str(i) + ". " + instructor['nombre'] + " - Vehículo: " + instructor['tipo_vehiculo'])
+
+
+with open("instructores.json", "w") as archivo:
+    json.dump(instructores, archivo, indent=4)
