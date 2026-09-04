@@ -1,6 +1,4 @@
 
-import clientes
-import vehiculos
 
 
 def menu():
@@ -24,9 +22,11 @@ while True:
     opcion = input("Ingrese una opcion: ").strip()
 
     if opcion == "1":
-        clientes.registrar_cliente()
+        from clientes import registrar_cliente
+        registrar_cliente()
     elif opcion == "2":
-        clientes.ver_clientes()
+        from clientes import ver_clientes
+        ver_clientes()
     elif opcion == "3":
         from citas import programar_cita
         programar_cita()

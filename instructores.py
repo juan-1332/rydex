@@ -1,8 +1,8 @@
 import json
-
+import os
 
 instructores = []
-
+datos_instructores = "datos"
 
 def instructor_ya_registrado(nombre):
     nombre_normalizado = nombre.strip().lower()
@@ -16,7 +16,10 @@ def registrar_instructor():
     while True:
         nombre = input("Ingrese el nombre del instructor: ").strip()
         if not nombre:
-            print("Debe ingresar un nombre.")
+            print("Debe ingresar un nombre, no dejar en blanco")
+            continue
+        if not nombre.replace(" ", "").isalpha():
+            print("El nombre no puede ser un numero.")
             continue
         if instructor_ya_registrado(nombre):
             print("Ese instructor ya existe en el sistema. Ingrese otro nombre.")
@@ -29,20 +32,25 @@ def registrar_instructor():
             break
 
         instructores.append({"nombre": nombre, "tipo_vehiculo": tipo_vehiculo})
-        with open("instructores.json", "w") as archivo:
+        ruta_archivo = os.path.join(datos_instructores, "instructores.json")
+        with open(ruta_archivo, "w") as archivo:
             json.dump(instructores, archivo, indent=4)  
         print("Instructor registrado: " + nombre)
         break
 
 
 def consultar_instructores():
-    if not instructores:
-        print("No hay instructores registrados.")
-        return
-    print("Instructores registrados:")
-    for i, instructor in enumerate(instructores, start=1):
-        print(str(i) + ". " + instructor['nombre'] + " - Vehículo: " + instructor['tipo_vehiculo'])
+    try:
+        with open(os.path.join(datos_instructores, "instructores.json"), "r") as archivo:
+            datos = json.load(archivo)
+            
+            if not datos:
+                print("El archivo está vacío, no hay instructores registrados.")
+            else:
+                print("instructorees registrados:")
+                for instructor in datos:
+                    print("- " + instructor['nombre'] + "- vehiculo: " + instructor['tipo_vehiculo'])
+    except FileNotFoundError:
+        print("El archivo no existe, no hay instructores registrados.")
 
 
-with open("instructores.json", "w") as archivo:
-    json.dump(instructores, archivo, indent=4)

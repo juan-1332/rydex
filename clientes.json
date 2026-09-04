@@ -1,1 +1,12 @@
-[]
+[
+    {
+        "nombre": "Diana Chaparro",
+        "documento": "1005455521",
+        "tipo_vehiculo": "ambos"
+    },
+    {
+        "nombre": "diana",
+        "documento": "123456789",
+        "tipo_vehiculo": "ambos"
+    }
+]

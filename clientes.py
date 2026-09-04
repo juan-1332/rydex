@@ -1,8 +1,8 @@
 import json
-
+import os   
 
 clientes = []
-
+datos_clientes = "datos"
 
 def documento_ya_registrado(documento):
     documento = documento.strip()
@@ -18,8 +18,11 @@ def registrar_cliente():
         if not nombre:
             print("El nombre no puede estar vacio.")
             continue
-
+        if not nombre.replace(" ", "").isalpha():
+            print("El nombre no puede ser un numero. Ingrese un nombre valido.")
+            continue
         break
+        
 
     while True:
         documento = input("Ingrese el documento del cliente: ").strip()
@@ -48,21 +51,25 @@ def registrar_cliente():
         "tipo_vehiculo": tipo_vehiculo,
     }
     clientes.append(cliente)
-    with open("clientes.json", "w") as archivo:
+    ruta_archivo = os.path.join(datos_clientes, "clientes.json")
+    with open(ruta_archivo, "w") as archivo:
         json.dump(clientes, archivo, indent=4)
     print("Cliente registrado correctamente: " + nombre)
     return cliente
 
 
 def ver_clientes():
-    if not clientes:
-        print("No hay clientes registrados.")
-        return
+    try:
+        with open(os.path.join(datos_clientes, "clientes.json"), "r") as archivo:
+            datos = json.load(archivo)
+            
+            if not datos:
+                print("El archivo está vacío, no hay clientes registrados.")
+            else:
+                print("Clientes registrados:")
+                for cliente in datos:
+                    print(" - " + cliente['nombre'] + " - " + cliente['documento'] + " - Vehículo: " + cliente['tipo_vehiculo'])
+    except FileNotFoundError:
+        print("El archivo no existe, no hay clientes registrados.")
 
-    print("\nClientes registrados:")
-    for indice, cliente in enumerate(clientes, start=1):
-        print(str(indice) + ". " + cliente['nombre'] + " - Documento: " + cliente['documento'] + " - Vehiculo: " + cliente['tipo_vehiculo'])
 
-
-with open("clientes.json", "w") as archivo:
-    json.dump(clientes, archivo, indent=4)

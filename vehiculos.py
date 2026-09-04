@@ -1,13 +1,8 @@
-
-
-
-
-
 import json
-
+import os
 
 vehiculos = []
-
+datos_vehiculos = "datos"
 
 def placa_ya_registrada(placa):
     placa = placa.strip().upper()
@@ -35,7 +30,8 @@ def registrar_vehiculo():
         if tipo in {"moto", "carro"}:
             placa = placa.upper()
             vehiculos.append({"placa": placa, "tipo": tipo})
-            with open("vehiculos.json", "w") as archivo:
+            ruta_archivo = os.path.join(datos_vehiculos, "vehiculos.json")
+            with open(ruta_archivo, "w") as archivo:
                      json.dump(vehiculos, archivo, indent=4)    
             print("Vehiculo registrado con placas: " + placa)
             return
@@ -45,17 +41,18 @@ def registrar_vehiculo():
 
 def consultar_vehiculos():
     try:
-        with open("vehiculos.json", "r") as archivo:
+        with open(os.path.join(datos_vehiculos, "vehiculos.json"), "r") as archivo:
             datos = json.load(archivo)
             
             if not datos:
                 print("El archivo está vacío, no hay vehículos registrados.")
             else:
-                print("Vehículos registrados:", datos)
+                print("vehiculos registrados:")
+                for vehiculo in datos:
+                    print("- " + "Placa: " + vehiculo['placa'] + " - Tipo: " + vehiculo['tipo'])
     except FileNotFoundError:
         print("El archivo no existe, no hay vehículos registrados.")
 
 
-with open("vehiculos.json", "w") as archivo:
-    json.dump(vehiculos, archivo, indent=4)
+
 

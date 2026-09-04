@@ -1,10 +1,18 @@
 import json
+import os
 
 from citas import citas
 from clientes import clientes
-
+datos_citas = "datos"
 
 def buscar_cliente(documento_cliente):
+    try:
+        with open(os.path.join(datos_citas, "clientes.json"), "r") as archivo:
+            clientes = json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No se pudo cargar el archivo de clientes.")
+        return None
+
     for cliente in clientes:
         if cliente["documento"] == documento_cliente:
             return cliente
@@ -13,8 +21,12 @@ def buscar_cliente(documento_cliente):
 
 def obtener_citas_cliente(documento_cliente):
     citas_cliente = []
+    with open(os.path.join(datos_citas, "citas.json"), "r") as archivo:
+        datos = json.load(archivo)
+    citas.clear()
+    citas.extend(datos)
     for cita in citas:
-        if cita["cliente"] == documento_cliente:
+        if cita["documento"] == documento_cliente:
             citas_cliente.append(cita)
     return citas_cliente
 
@@ -49,23 +61,24 @@ def seleccionar_cita(citas_cliente):
 
 
 def registrar_asistencia(cita):
-    observaciones=observaciones_cita(cita) 
+    observaciones_cita(cita)
     while True:
-         
         respuesta = input("¿El cliente asistio a la cita? (si/no): ").strip().lower()
         if respuesta == "si":
             cita["asistio"] = True
             print("Asistencia registrada correctamente.")
-            with open("citas.json", "w") as archivo:
-                json.dump(citas, archivo, indent=4)
-            return
+            break
         if respuesta == "no":
             cita["asistio"] = False
             print("Inasistencia registrada correctamente.")
-            with open("citas.json", "w") as archivo:
-                json.dump(citas, archivo, indent=4)
-            return
+            break
         print("Respuesta invalida. Use 'si' para si o 'no' para no.")
+
+    if "observaciones" not in cita:
+        cita["observaciones"] = ""
+
+    with open(os.path.join(datos_citas, "citas.json"), "w") as archivo:
+        json.dump(citas, archivo, indent=4)
 
 
 def observaciones_cita(citas):
@@ -77,14 +90,20 @@ def observaciones_cita(citas):
             observacion = input("Ingrese la observacion: ").strip()
             citas["observaciones"] = observacion
             print("Observacion registrada correctamente.")
-            return
+            return 
         if opcion == "no":
             print("No se agregaron observaciones.")
             return
         print("Respuesta invalida. Use 'si' para si o 'no' para no.")   
 def controlar_asistencia():
     print("----- Controlar Asistencia -----")
-
+    try:
+        with open(os.path.join(datos_citas, "clientes.json",), "r") as archivo:
+            clientes = json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No se pudo cargar el archivo de clientes.")
+        return
+    
     if not clientes:
         print("No hay clientes registrados.")
         return

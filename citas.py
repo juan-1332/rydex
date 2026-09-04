@@ -1,10 +1,10 @@
 import json
 import re
 from datetime import datetime, timedelta
-
+import os
 
 citas = []
-
+datos_citas = "datos"
 
 def fecha_y_hora_validas(fecha, hora):
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", fecha):
@@ -43,7 +43,6 @@ def instructor_ocupado(nombre, fecha_hora):
 
 
 def programar_cita():
-    from clientes import clientes
     from instructores import instructores
     from vehiculos import vehiculos
 
@@ -51,8 +50,16 @@ def programar_cita():
     documento_cliente = input("Ingrese el documento del cliente: ").strip()
     documento_encontrado = None
 
+    
+    try:
+        with open(os.path.join(datos_citas, "clientes.json"), "r") as archivo:
+            clientes = json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No se pudo cargar el archivo de clientes.")
+        return
+
     for cliente in clientes:
-        if cliente["documento"] == documento_cliente:
+        if str(cliente.get("documento", "")).strip() == documento_cliente:
             documento_encontrado = cliente
             break
 
@@ -63,6 +70,13 @@ def programar_cita():
     print("Cliente encontrado: " + documento_encontrado["nombre"])
 
     vehiculos_cliente = []
+    try:
+        with open(os.path.join(datos_citas, "vehiculos.json"), "r") as archivo:
+            vehiculos = json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No se pudo cargar el archivo de vehiculos.")
+        return
+
     for vehiculo in vehiculos:
         tipo_cliente = documento_encontrado["tipo_vehiculo"]
         puede_usar_vehiculo = tipo_cliente == "ambos" or vehiculo["tipo"] == tipo_cliente
@@ -108,6 +122,13 @@ def programar_cita():
         print("Opcion de vehiculo invalida.")
 
     instructores_disponibles = []
+    try:
+        with open(os.path.join(datos_citas, "instructores.json"), "r") as archivo:
+            instructores = json.load(archivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("No se pudo cargar el archivo de instructores.")
+        return
+    
     for instructor in instructores:
         tipo_instructor = instructor["tipo_vehiculo"]
         puede_dar_clase = tipo_instructor == "ambos" or tipo_instructor == vehiculo_seleccionado["tipo"]
@@ -136,6 +157,7 @@ def programar_cita():
 
     nueva_cita = {
         "cliente": documento_encontrado["nombre"],
+        "documento": documento_encontrado["documento"],
         "placa": vehiculo_seleccionado["placa"].upper(),
         "instructor": instructor_seleccionado["nombre"],
         "fecha": fecha_cita,
@@ -143,13 +165,12 @@ def programar_cita():
         "duracion_horas": 1,
     }
     citas.append(nueva_cita)
-    with open("citas.json", "w") as archivo:
-        json.dump(citas, archivo, indent=4)
+    ruta_archivo = os.path.join(datos_citas, "citas.json")
+    with open(ruta_archivo, "w") as archivo:
+        json.dump(citas, archivo, indent=4) 
     print("Cita programada para " + nueva_cita["cliente"] + ".")
     print("Vehiculo: " + nueva_cita["placa"])
     print("Instructor: " + nueva_cita["instructor"])
     print("Fecha y hora: " + nueva_cita["fecha"] + " " + nueva_cita["hora"])
     return nueva_cita
 
-with open("citas.json", "w") as archivo:
-    json.dump(citas, archivo, indent=4)

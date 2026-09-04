@@ -1,12 +1,13 @@
 [
     {
-        "cliente": "juan",
-        "placa": "444",
-        "instructor": "felipe",
-        "fecha": "2026-08-09",
-        "hora": "07:54",
+        "cliente": "diana",
+        "documento": "123456789",
+        "placa": "UVB 73G",
+        "instructor": "juan pablo",
+        "fecha": "2026-01-12",
+        "hora": "07:00",
         "duracion_horas": 1,
-        "observaciones": "juan muy duro",
-        "asistio": false
+        "observaciones": "maneja perfecto, crack",
+        "asistio": true
     }
 ]
